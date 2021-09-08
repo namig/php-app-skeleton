@@ -19,7 +19,7 @@
     - php
     - postgres
 - Прописать любой адрес сайта, например `skeleton.loc`, в `/etc/hosts` `127.0.0.1 skeleton.loc`
-- Протестировать, открыв в браузере ссылку [http://skeleton.loc]([http://skeleton.loc])
+- Протестировать, открыв в браузере ссылку [skeleton.loc](http://skeleton.loc)
 
 ### Структура проекта
 
@@ -33,14 +33,28 @@
     В адресной строке можно явно указывать имя скрипта `skeleton.loc/index.php`.
 - `src` - тут должны лежать внутренние исходники проекта при использовании composer, классы и неймспейсы
   - `Kernel.php` - это точка входа в приложение
+- `vendor` - эта директория, куда будут установлены зависимости из `composer.json`
 - `composer.json` - файл с указанием зависимостей composer
+- `composer.lock` - файл фиксации точных версий пакетов `composer`, 
+  зависит от `composer.json` и автоматически меняется при его обновлении, не требует ручного вмешательства
 - `docker-compose.yml` - здесь указаны сервисы, которые будут запущены с помощью `docker-compose`
+
 
 ### Использование менеджера пакетов composer
 
-Для установки всех пакетов из composer.json запустить команды:
+Для установки всех пакетов из composer.json запустить команду:
 ```
-`docker-compose exec php composer install`
+docker-compose exec php composer install
+```
+
+Для добавления библиотеки, например `guzzle`:
+```
+docker-compose exec php composer require guzzlehttp/guzzle:^7.0
+```
+
+Эта библиотека уже установлена в `composer.json`, можно удалить её командой:
+```
+docker-compose exec php composer remove guzzlehttp/guzzle
 ```
 
 ### Использование базы данных
