@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+
+  nginx:
+    build:
+      dockerfile: docker/nginx/Dockerfile
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+    ports:
+      - 80:80
+    environment:
+      FASTCGI_HOST: php
+      FASTCGI_PORT: 9000
+    links:
+      - php
+
+  php:
+    build:
+      dockerfile: docker/php/Dockerfile
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+    environment:
+      APP_ENV: dev
+      PHP_IDE_CONFIG: "serverName=docker"
+
+  postgres:
+    image: postgres:13.3-alpine3.14
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=skeleton
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+volumes:
+  pgdata:
